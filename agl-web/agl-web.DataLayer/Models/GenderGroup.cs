@@ -11,5 +11,7 @@ namespace agl_web.DataLayer.Models
         public string Gender { get; set; }
 
         public List<Person> PeopleList { get; set; }
+
+        public List<Pet> PetList { get; set; }
     }
 }

@@ -55,13 +55,13 @@ namespace agl_web.DataLayer
                 retval =
                 (
                     from p in allPeople
-                    where p.pets != null && p.pets.Any(x => x.type.ToUpper() == "CAT")
+                    where p.Pets != null && p.Pets.Any(x => x.Type.ToUpper() == "CAT")
                     select new Person()
                     {
-                        age = p.age,
-                        gender = p.gender,
-                        name = p.name,
-                        pets = p.pets.Where(x => x.type.ToUpper() == "CAT").OrderBy(x => x.name).ToList()
+                        Age = p.Age,
+                        Gender = p.Gender,
+                        Name = p.Name,
+                        Pets = p.Pets.Where(x => x.Type.ToUpper() == "CAT").OrderBy(x => x.Name).ToList()
                     }
                 ).ToList();
                 
@@ -74,17 +74,89 @@ namespace agl_web.DataLayer
             return retval;
         }
 
-        public List<GenderGroup> GetGenderGroups(List<Person> p)
+        public List<Pet> GetPetsWithOwnerGender()
+        {
+            List<Pet> retval = new List<Pet>();
+
+            try
+            {
+                //Get all people to filter on
+                var allPeople = this.GetPeople();
+
+                //Get all people with cats
+                var peopleCatList =
+                (
+                    from p in allPeople
+                    where p.Pets != null && p.Pets.Any(x => x.Type.ToUpper() == "CAT")
+                    select new Person()
+                    {
+                        Age = p.Age,
+                        Gender = p.Gender,
+                        Name = p.Name,
+                        Pets = (
+                                    from pet in p.Pets
+                                    where pet.Type.ToUpper() == "CAT"
+                                    select new Pet()
+                                    {
+                                        Name = pet.Name,
+                                        Type = pet.Type,
+                                        OwnerGender = p.Gender
+                                    }
+                                ).ToList()
+                    }
+                );
+
+                //Add each owners pets together into a Pet List
+                foreach (Person p in peopleCatList)
+                {
+                    retval.AddRange(p.Pets);
+                }
+                
+                //Order pet list alphabetically
+                retval = retval.OrderBy(x => x.Name).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                //Log exception here...
+            }
+
+            return retval;
+        }
+
+        public List<GenderGroup> GetPeopleGenderGroups(List<Person> p)
         {
             List<GenderGroup> retval = new List<GenderGroup>();
 
             try
             {
                 retval =
-                    p.GroupBy(x => x.gender, (key, g) => new GenderGroup
+                    p.GroupBy(x => x.Gender, (key, g) => new GenderGroup
                     {
                         Gender = key,
                         PeopleList = g.ToList()
+                    }).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                //Log exception here...
+            }
+
+            return retval;
+        }
+
+        public List<GenderGroup> GetPetGenderGroups(List<Pet> p)
+        {
+            List<GenderGroup> retval = new List<GenderGroup>();
+
+            try
+            {
+                retval =
+                    p.GroupBy(x => x.OwnerGender, (key, g) => new GenderGroup
+                    {
+                        Gender = key,
+                        PetList = g.ToList()
                     }).ToList();
 
             }

@@ -18,11 +18,12 @@ namespace agl_web.Controllers
             //init People Service
             PeopleService ps = new PeopleService("http://agl-developer-test.azurewebsites.net/people.json");
 
-            //Get all people with cats
-            var peopleWithCats = ps.GetPeopleWithCats();
+            //Get all cats and then group by the owner's gender
+            List<Pet> petArray = ps.GetPetsWithOwnerGender();
+            List<GenderGroup> gp = ps.GetPetGenderGroups(petArray);
 
             //Create a Gender List - by grouping  the people with cats into 2 genders (Male, Female)
-            GenderListVM genderList = new GenderListVM() { GenderList = ps.GetGenderGroups(peopleWithCats) };
+            GenderListVM genderList = new GenderListVM() { GenderList = gp };
 
             return View(genderList);
         }

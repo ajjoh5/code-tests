@@ -23,26 +23,6 @@ namespace agl_web.Tests
         }
 
         [TestMethod]
-        public void GetPeopleWithCats()
-        {
-            PeopleService ps = new PeopleService("http://agl-developer-test.azurewebsites.net/people.json");
-            List<Person> pArray = ps.GetPeopleWithCats();
-
-            Assert.AreEqual(5, pArray.Count, "People Service did not return any people with cats");
-        }
-
-        [TestMethod]
-        public void GetPeopleWithCats_GroupedByGender()
-        {
-            PeopleService ps = new PeopleService("http://agl-developer-test.azurewebsites.net/people.json");
-            List<Person> pArray = ps.GetPeopleWithCats();
-            List<GenderGroup> gp = ps.GetPeopleGenderGroups(pArray);
-
-            Assert.AreEqual(2, gp.Count, "Gender groups did not group by correctly");
-        }
-
-
-        [TestMethod]
         public void GetCats_GroupedByGender()
         {
             PeopleService ps = new PeopleService("http://agl-developer-test.azurewebsites.net/people.json");

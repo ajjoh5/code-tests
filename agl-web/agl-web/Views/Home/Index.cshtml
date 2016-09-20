@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model agl_web.UI.Models.GenderListVM
+
+<div>
+    <h1>AGL Developer Test</h1>
+    <p class="lead">Hi my name is Adam Johnstone! Thankyou for the opportunity and I hope we can chat soon about me progressing into the next round of the interview.</p>
+    <p>See below for a list of all the cats in alphabetical order under a heading of the gender of their owner.</p>
+    <table class="table table-striped">
+        <tr>
+            @foreach (agl_web.DataLayer.Models.GenderGroup g in Model.GenderList)
+            {
+                <th><h4>@g.Gender</h4></th>
+            }
+        </tr>
+        <tr>
+            @foreach (agl_web.DataLayer.Models.GenderGroup g in Model.GenderList)
+            {
+                <td>
+                    @foreach (agl_web.DataLayer.Models.Person p in g.PeopleList)
+                    {
+                        <strong>@p.name</strong><br/>
+                        <ul>
+                            @foreach (agl_web.DataLayer.Models.Pet pet in p.pets)
+                            {
+                                <li>@pet.name</li>
+                            }
+                        </ul>
+                    }
+                </td>              
+            }          
+        </tr>
+    </table>
+</div>
